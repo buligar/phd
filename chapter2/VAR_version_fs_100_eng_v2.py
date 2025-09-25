@@ -43,8 +43,8 @@ G = NeuronGroup(n_neurons,
                 method='euler')
 G.v = v_rest
 
-G.amplitude = A  # нейроны получают амплитуду A
-G.amplitude2 = A  # нейроны получают амплитуду A
+G.amplitude = A  
+G.amplitude2 = A
 
 
 # Вероятности связей
@@ -86,7 +86,6 @@ syn1 = Synapses(P1, G[:n_half], on_pre='v_post += J')
 syn1.connect(p=0.3)
 syn2 = Synapses(P2, G[n_half:], on_pre='v_post += J')
 syn2.connect(p=0.3)
-
 
 sizes = [50, 50]
 probs = [[0.15, 0.05], [0.05, 0.15]]
@@ -136,53 +135,6 @@ W = np.zeros((n_neurons, n_neurons))
 W[S_E.i[:], S_E.j[:]] = S_E.w[:]
 W[S_I.i[:], S_I.j[:]] = S_I.w[:]
 
-# # 5.1 Возбуждающие внутри 1-го кластера
-# S_E1 = Synapses(G, G, model='w : 1',  on_pre='v_post += J * w')
-# S_E1.connect(condition='i<40 and j<50', p=p_intra1)
-# S_E1.w = w_intra1
-# # 5.2 Тормозные внутри 1-го кластера
-# S_I1 = Synapses(G, G,model='w : 1',  on_pre='v_post -= J * w')
-# S_I1.connect(condition='i>=40 and i<50 and j<50', p=p_intra1)
-# S_I1.w = w_intra1
-
-# # 5.3 Возбуждающие из 1 кластера во 2 кластер
-# S_E12 = Synapses(G, G, model='w : 1', on_pre='v_post += J * w')
-# S_E12.connect(condition='i<40 and j>=50', p=p_12)
-# S_E12.w = w_12
-# # 5.4 Тормозные  из 1 кластера во 2 кластер
-# S_I12 = Synapses(G, G, model='w : 1',  on_pre='v_post -= J * w')
-# S_I12.connect(condition='i>=40 and i<50 and j>=50', p=p_12)
-# S_I12.w = w_12
-
-# # # 5.5 Возбуждающие из 2 кластера во 1 кластер
-# S_E21 = Synapses(G, G,model='w : 1',  on_pre='v_post += J * w')
-# S_E21.connect(condition='i>=50 and i<90 and j<50', p=p_21)
-# S_E21.w = w_21
-# # 5.6 Тормозные  из 2 кластера во 1 кластер
-# S_I21 = Synapses(G, G,model='w : 1',  on_pre='v_post -= J * w')
-# S_I21.connect(condition='i>=90 and j<50', p=p_21)
-# S_I21.w = w_21
-# # 5.7 Возбуждающие внутри 2-го кластера
-# S_E2 = Synapses(G, G,model='w : 1',  on_pre='v_post += J * w')
-# S_E2.connect(condition='i>=50 and i<90 and j>=50', p=p_intra2)
-# S_E2.w = w_intra2
-# # 5.8 Тормозные внутри 2-го кластера
-# S_I2 = Synapses(G, G,model='w : 1',  on_pre='v_post -= J * w')
-# S_I2.connect(condition='i>=90 and j>=50', p=p_intra2)
-# S_I2.w = w_intra2
-
-
-# W = np.zeros((n_neurons, n_neurons))
-# W[S_E1.i[:], S_E1.j[:]] = S_E1.w[:]
-# W[S_I1.i[:], S_I1.j[:]] = S_I1.w[:]
-# W[S_E12.i[:], S_E12.j[:]] = S_E12.w[:]
-# W[S_I12.i[:], S_I12.j[:]] = S_I12.w[:]
-
-# W[S_E2.i[:], S_E2.j[:]] = S_E2.w[:]
-# W[S_I2.i[:], S_I2.j[:]] = S_I2.w[:]
-# W[S_E21.i[:], S_E21.j[:]] = S_E21.w[:]
-# W[S_I21.i[:], S_I21.j[:]] = S_I21.w[:]
-
 
 fig, ax = plt.subplots(figsize=(6, 5))
 
@@ -190,23 +142,22 @@ im = ax.matshow(W, cmap='viridis')          # сам образ (AxesImage)
 cbar = fig.colorbar(im, ax=ax,             # ← добавляем colorbar
                     shrink=0.85,           # (необязательно) делаем короче
                     pad=0.02)              # (необязательно) отступ от осей
-cbar.set_label('Значение веса синапса', fontsize=16)
+cbar.set_label('Weight of synapses', fontsize=16)
 
-ax.set_xlabel('Постсинаптический нейрон', fontsize=16)
-ax.set_ylabel('Пресинаптический нейрон', fontsize=16)
+ax.set_xlabel('Postsynaptic neuron', fontsize=16)
+ax.set_ylabel('Presynaptic neuron', fontsize=16)
 ax.tick_params(axis='x', which='major', labelsize=12)
 ax.tick_params(axis='y', which='major', labelsize=12)
 
 
-fig.savefig('spike_raster_2col_ru.pdf',
+fig.savefig('spike_raster_2col.pdf',
             format='pdf',
             dpi=300,
             bbox_inches='tight')
-fig.savefig('spike_raster_2col_ru.png',
+fig.savefig('spike_raster_2col.png',
             format='png',
             dpi=600,
             bbox_inches='tight')
-
 
 mon = StateMonitor(G, 'v', record=True)
 spike_monitor = SpikeMonitor(G)
@@ -216,18 +167,22 @@ run(t_total_sim * second)
 
 spike_times = spike_monitor.t / second
 spike_indices = spike_monitor.i
+
+# --- Построение спайкового растера в двухколоночном формате IEEE ---
 plt.figure(figsize=(10, 8))
 plt.scatter(spike_times, spike_indices, marker='|')
 plt.xlim(0,t_total_sim)
 plt.ylim(0,n_neurons)
-plt.xlabel('Время (сек)', fontsize=16)
-plt.ylabel('Нейроны', fontsize=16)
+plt.xlabel('Time (s)', fontsize=16)
+plt.ylabel('Neurons', fontsize=16)
 plt.tick_params(axis='x', which='major', labelsize=14)
 plt.tick_params(axis='y', which='major', labelsize=14)
-plt.savefig('spikes_ru.pdf', format='pdf', dpi=300, bbox_inches='tight')
-plt.savefig('spikes_ru.png', format='png', dpi=600, bbox_inches='tight')
+plt.savefig('spikes.pdf', format='pdf', dpi=300, bbox_inches='tight')
+plt.savefig('spikes.png', format='png', dpi=600, bbox_inches='tight')
 plt.show()
-plt.show()
+
+
+
 # Извлечение данных
 t_sim = mon.t/second
 x1 = mon.v[:n_neurons//2, :] / mV  # (форма: n_neurons//2, 1000)
@@ -248,16 +203,20 @@ signal_noisy = np.stack((trial0, trial1), axis=-1)  # (1000, n_neurons//2, 2)
 fig, axes = plt.subplots(2, 1, figsize=(10, 8))
 
 axes[0].plot(t_sim, signal_noisy[:,0,0], label="Сигнал 1")
-axes[0].set_xlabel("Время (сек)", fontsize=16)
-axes[0].set_ylabel("Мембранный потенциал (мВ)", fontsize=16)
+axes[0].set_xlabel("Time (s)", fontsize=16)
+axes[0].set_ylabel("Membrane potential (mV)", fontsize=16)
 axes[0].legend()
 
 axes[1].plot(t_sim, signal_noisy[:,0,1], label="Сигнал 2")
-axes[1].set_xlabel("Время (сек)", fontsize=16)
-axes[1].set_ylabel("Мембранный потенциал (мВ)", fontsize=16)
+axes[1].set_xlabel("Time (s)", fontsize=16)
+axes[1].set_ylabel("Membrane potential (mV)", fontsize=16)
 axes[1].legend()
 
+
+
 v  = np.stack([v1, v2], axis=-1)
+
+
 
 def fit_var_ols_const(y, p, ridge=0.0):
     y = np.asarray(y, float)
@@ -332,7 +291,7 @@ nfft    = 128                   # более тонкая сетка
 freqs   = np.linspace(0, fs/2, nfft//2+1)
 n_freq    = len(freqs) # 51
 
-def spectra_2x2(W, Sigma, i, j):
+def spectra_2x2(A, Sigma, i, j):
     nF = len(freqs)
     gc  = np.empty(nF)
     dtf = np.empty(nF)
@@ -352,12 +311,12 @@ def spectra_2x2(W, Sigma, i, j):
     else:
         raise ValueError("Индексы i, j должны быть 0/1 и i != j.")
 
+    print(len(freqs))
     for l, f in enumerate(freqs): # l=51 f=0-50
         z  = np.exp(-1j * 2*np.pi * f / fs)
         Az = np.eye(2, dtype=complex) # [[1+j, 0+j],[0+j, 1+j]]
-        
-        for p, Wl in enumerate(W, start=1): # p=3 Wl=(2,2)
-            Az -= Wl * z**p
+        for p, Al in enumerate(A, start=1): # p=4 Al=(2,2)
+            Az -= Al * z**p
 
         Hz = np.linalg.inv(Az) # Az=[[a,b][c,d]] A(z)^{-1}=1/(ad-bc)[[d, -b],[-c, a]]
         Sz = Hz @ Sigma @ Hz.conj().T # S(z)=H(z)ΣH^*(z) Hz=[[3+j, 5],[2-j, j]] Hz^*=[[3-j, 2+j],[5, -j]]
@@ -371,7 +330,8 @@ def spectra_2x2(W, Sigma, i, j):
 
     return gc, dtf, pdc
 
-def var_ols_const(y, p=3):
+
+def var_ols_const(y, p=4):
     y = np.asarray(y, float)
     # y = y.reshape(50, 100)
     T, k = y.shape # (50, 2)
@@ -383,15 +343,15 @@ def var_ols_const(y, p=3):
     XtX = X.T @ X # (7, 7)
     XtY = X.T @ Y # (7, 2)
     alpha = 1e-3  # или подобрать на кросс‐валидации
-    B = np.linalg.solve(XtX + alpha * np.eye(XtX.shape[0]), XtY) # (7, 2) решаем Ax=b, где XtX-A, XtY-b и еще добавляем регуляризацию alpha * np.eye(XtX.shape[0]) 
+    B = np.linalg.solve(XtX + alpha * np.eye(XtX.shape[0]), XtY) # (7, 2) решаем Ax=b, где XtX-A, XtY-b и еще добавляем регуляризацию
     # B = np.linalg.solve(XtX, XtY) # (7, 2) решаем Ax=b, где XtX-A, XtY-b
-    B_new = [B[1+l*k : 1+(l+1)*k].T for l in range(p)] # (3, 2, 2)
-    W = np.stack(B_new, axis=0) # (3, 2, 2) -> собираем в один тензор
+    B_new = [B[1+i*k : 1+(i+1)*k].T for i in range(p)] # (3, 2, 2)
+    A = np.stack(B_new, axis=0) # (3, 2, 2) -> собираем в один тензор
     
     E = Y - X @ B # (47, 2)
     dof = (T-p) - (k*p + 1) # 40
     Sigma = (E.T @ E) / dof # (2, 2)
-    return W, Sigma # (3, 2, 2) и (2, 2)
+    return A, Sigma # (4, 2, 2) и (2, 2)
 
 
 
@@ -400,8 +360,8 @@ def slide_2x2(i, j):
     G, D, P, T = [], [], [], []
     for start in range(0, n_samples - win_len + 1, step): # 50 (0-745)
         seg = v[start:start + win_len]
-        W, Sigma = var_ols_const(seg, order)
-        g, d, p = spectra_2x2(W, Sigma, i, j)
+        A, Sigma = var_ols_const(seg, order)
+        g, d, p = spectra_2x2(A, Sigma, i, j)
         G.append(g) 
         D.append(d) 
         P.append(p)
@@ -413,10 +373,10 @@ gc_12, dtf_12, pdc_12, times = slide_2x2(1, 0)
 gc_21, dtf_21, pdc_21, _ = slide_2x2(0, 1)
 
 
-n_win  = gc_12.shape[1]                 # число окон
-dt      = step / fs                     # 0.16 c
-times   = np.arange(n_win)*dt + win_len/(2*fs)     # центры окон (как раньше)
-time_edges = np.arange(n_win + 1)*dt               # ← теперь 0, 0.16, 0.32 … 10
+n_win  = gc_12.shape[1]              
+dt      = step / fs                   
+times   = np.arange(n_win)*dt + win_len/(2*fs)     
+time_edges = np.arange(n_win + 1)*dt            
 df         = freqs[1] - freqs[0]
 freq_edges = np.concatenate(([0], freqs[:-1] + df/2, [freqs[-1] + df/2]))
 
@@ -426,38 +386,47 @@ measures = {
     'DTF': (dtf_12, dtf_21)
 }
 
-fig, axs = plt.subplots(2, 3, figsize=(14, 6), sharey=True,
+fig, axs = plt.subplots(3, 2,
+                        figsize=(7, 12),
+                        sharex=True, sharey=True,
                         constrained_layout=True)
 
-labels = ['а', 'б', 'в']
+measures = {
+    'GC' : (gc_12,  gc_21),
+    'PDC': (pdc_12, pdc_21),
+    'DTF': (dtf_12, dtf_21)
+}
 
-for col, (name, (m12, m21)) in enumerate(measures.items()):
-    # Верхний ряд: связь 1→2
-    axs[0, col].pcolormesh(time_edges, freq_edges, m12, shading='auto', cmap='turbo')
-    axs[0, col].set_title(f'({labels[col]}) {name}, 1 → 2', fontsize=16)
-    # Нижний ряд: связь 2→1
-    axs[1, col].pcolormesh(time_edges, freq_edges, m21, shading='auto', cmap='turbo')
-    axs[1, col].set_title(f'{name}, 2 → 1', fontsize=16)
+for row, (name, (m12, m21)) in enumerate(measures.items()):
+    im1 = axs[row, 0].pcolormesh(time_edges, freq_edges, m12,
+                                 shading='auto', cmap='turbo')
+    axs[row, 0].set_title(f'{name}, 1 → 2', fontsize=14)
+    im2 = axs[row, 1].pcolormesh(time_edges, freq_edges, m21,
+                                 shading='auto', cmap='turbo')
+    axs[row, 1].set_title(f'{name}, 2 → 1', fontsize=14)
+    cbar = fig.colorbar(im1, ax=[axs[row,0], axs[row,1]],
+                        shrink=0.85, pad=0.02)
+    cbar.set_label('Power', fontsize=12)
 
-    # Оформление осей и границ
-    for ax in (axs[0, col], axs[1, col]):
-        ax.set_xlim(time_edges[0], time_edges[-1])
-        ax.set_ylim(0, fs/2)
-        ax.set_xlabel('t, сек', fontsize=14)
-        ax.tick_params(axis='x', labelsize=12)
-        ax.tick_params(axis='y', labelsize=12)
-
-# Общая цветовая шкала для каждого показателя
-for col in range(3):
-    im = axs[0, col].collections[0]  # Берём последний картограммный объект
-    cbar = fig.colorbar(im, ax=axs[:, col], shrink=0.85, pad=0.01)
-    cbar.set_label('Мощность', fontsize=14)
-
-# подпись оси частот только слева
 for ax in axs[:, 0]:
-    ax.set_ylabel('f, Гц', fontsize=16)
+    ax.set_xlabel('Time (s)', fontsize=12)
+for ax in axs[:, 1]:
+    ax.set_xlabel('Time (s)', fontsize=12)
+for ax in axs[:, 0]:
+    ax.set_ylabel('Frequency (Hz)', fontsize=12)
+
+# общие границы и шаг тиков
+for ax in axs.flatten():
+    ax.xaxis.set_major_locator(matplotlib.ticker.MultipleLocator(2.0))   # тики каждые 2 с
+    ax.xaxis.set_minor_locator(matplotlib.ticker.MultipleLocator(1.0))   # минорные тики
+
+for row in (0, 1):
+    for col in (0, 1):
+        ax = axs[row, col]
+        ax.tick_params(axis='x', which='both', labelbottom=True, bottom=True)
+
+fig.savefig('figure_2col.pdf', format='pdf', dpi=300, bbox_inches='tight')
+fig.savefig('figure_2col.png', format='png', dpi=600, bbox_inches='tight')
 
 
-fig.savefig('figure_2col_ru.pdf', format='pdf', dpi=300, bbox_inches='tight')
-fig.savefig('figure_2col_ru.png', format='png', dpi=600, bbox_inches='tight')
-plt.show()
+
