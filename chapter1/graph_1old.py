@@ -5,7 +5,6 @@ import matplotlib as mpl
 import math
 import matplotlib.colors as mcolors
 import networkx as nx
-import pyspike as spk
 import gzip, pickle, glob, re, os
 from pathlib import Path
 from mpl_toolkits.mplot3d import Axes3D
