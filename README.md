@@ -27,9 +27,6 @@ pip install numpy scipy pandas matplotlib networkx brian2
 | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | `one_cluster_bez_boost` / `one_cluster_s_boost`              | **Top-centrality**: стимуляция топ-узлов целевого кластера (без/с бустом центральности) |
 | `random_neighbors_bez_boost` / `random_neighbors_s_boost`    | **Proxy**: случайные соседи 3 самых центральных узлов других кластеров (без/с бустом)   |
-| `top_neighbors_bez_boost` / `top_neighbors_s_boost` *(опц.)* | **Hybrid**: соседи наиболее центральных узлов целевого и/или смежных кластеров          |
-
-> Если «hybrid» не используется в вашей серии, просто опустите соответствующие пункты.
 
 ---
 
@@ -47,8 +44,6 @@ python unzip.py
 * `results_ext_test1_one_cluster_s_boost.zip`
 * `results_ext_test1_random_neighbors_bez_boost.zip`
 * `results_ext_test1_random_neighbors_s_boost.zip`
-
-*(Опционально для hybrid: `results_ext_test1_top_neighbors_bez_boost.zip`, `results_ext_test1_top_neighbors_s_boost.zip`.)*
 
 > **Важно (о структуре путей):** проверяйте, что после распаковки нет лишней вложенности вида
 > `.../results_ext_test1/results_ext_test1/plots`.
@@ -90,7 +85,6 @@ mode: str = 'one_cluster_bez_boost'  # затем меняйте на кажды
 * `random_neighbors_bez_boost`
 * `random_neighbors_s_boost`
 
-*(Опционально для hybrid — ещё два запуска: `top_neighbors_bez_boost`, `top_neighbors_s_boost`.)*
 
 Каждый запуск создаёт папку `results_ext_test1`. После каждого запуска **сразу переименуйте** её согласно режиму:
 
@@ -209,7 +203,6 @@ python sim_copy_old.py && mv results_ext_test1 results_ext_test1_one_cluster_bez
 python sim_copy_old.py && mv results_ext_test1 results_ext_test1_one_cluster_s_boost
 python sim_copy_old.py && mv results_ext_test1 results_ext_test1_random_neighbors_bez_boost
 python sim_copy_old.py && mv results_ext_test1 results_ext_test1_random_neighbors_s_boost
-# (опц.) ещё 2 режима hybrid
 
 # доп. данные + графики
 python test1.py
@@ -226,12 +219,6 @@ python graph_4old.py
 unzip results_ext_test1.zip
 python graph_1new.py
 ```
-
----
-
-## Примечание о «hybrid»
-
-Если в проекте присутствуют архивы/режимы `top_neighbors_*`, добавьте их в распаковку и в сводные скрипты наравне с остальными. В противном случае раздел «hybrid» опустите — сравнение будет выполнено для **top-centrality** и **proxy**.
 
 ---
 
