@@ -10,8 +10,6 @@ results_dirs = {
     'proxy centrality\nс бустом':      'results_ext_test1_random_neighbors_s_boost/rates',
     'top centrality\nбез буста':      'results_ext_test1_one_cluster_bez_boost/rates',
     'top centrality\nс бустом':        'results_ext_test1_one_cluster_s_boost/rates',
-    'hybrid centrality\nбез буста':    'results_ext_test1_top_neighbors_bez_boost/rates',
-    'hybrid centrality\nс бустом':     'results_ext_test1_top_neighbors_s_boost/rates',
 }
 
 p_within  = 0.15  # вероятность связи внутри кластеров

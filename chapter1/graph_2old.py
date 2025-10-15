@@ -13,10 +13,6 @@ groups = {
         'one\ncluster\nwith\nboost':    'results_ext_test1_one_cluster_s_boost',
         'random\nneighbors\nwith\nboost': 'results_ext_test1_random_neighbors_s_boost',
     },
-    'one_top_s_boost': {
-        'one\ncluster\nwith\nboost': 'results_ext_test1_one_cluster_s_boost',
-        'top\nneighbors\nwith\nboost': 'results_ext_test1_top_neighbors_s_boost',
-    }
 }
 
 # 2. Общие параметры анализа

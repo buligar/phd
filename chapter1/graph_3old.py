@@ -176,31 +176,11 @@ def plot_3d_with_significance(
         transform=cax_avg.transAxes,
         fontsize=20
     )
-
-    plt.savefig(output_pdf, format="pdf")
-    plt.savefig(output_svg, format="svg")
     plt.show()
 if __name__ == "__main__":
     # Создаём папку «results», если необходимо
     if not os.path.exists("results"):
         os.mkdir("results")
-
-    # plot_3d_with_significance(
-    #     stats_csvs=[
-    #         "results_ext_test1/avg_tests_avg_spikes_5000ms.csv",
-    #     ],
-    #     pvals_csv="results/metrics_vs_random/mannwhitney_metrics_vs_random_all.csv",
-    #     labels=["one_cluster_s_boost"],
-    #     colormap_names=["magma", "spring"],
-    #     alphas_meas=[1],
-    #     alphas_rand=[0.4],
-    #     p_input_values=np.arange(0.1, 0.21, 0.05),
-    #     p_between_values=np.arange(0.01, 0.11, 0.03),
-    #     max_rate=10,
-    #     I0_value_filter=1000,
-    #     output_pdf="results/3D_one_s_boost.pdf",
-    #     output_svg="results/3D_one_s_boost.svg"
-    # )
 
 
     # Сравнение one_cluster_bez_boost vs random_neighbors_bez_boost
@@ -237,22 +217,4 @@ if __name__ == "__main__":
         max_rate=9,
         I0_value_filter=1000,
         output_pdf="results/3D_one_s_boost_vs_random_s_boost_with_std.pdf"
-    )
-
-    # Сравнение one_cluster_s_boost vs top_neighbors_s_boost
-    plot_3d_with_significance(
-        stats_csvs=[
-            "results_ext_test1_one_cluster_s_boost/avg_tests_avg_spikes_5000ms.csv",
-            "results_ext_test1_top_neighbors_s_boost/avg_tests_avg_spikes_5000ms.csv"
-        ],
-        pvals_csv="results/one_top_s_boost/mannwhitney_one_top_s_boost_all.csv",
-        labels=["one_cluster_s_boost", "top_neighbors_s_boost"],
-        colormap_names=["magma", "magma"],
-        alphas_meas=[1, 0.5],
-        alphas_rand=[1, 1],
-        p_input_values=np.arange(0.1, 0.21, 0.05),
-        p_between_values=np.arange(0.01, 0.11, 0.03),
-        max_rate=9,
-        I0_value_filter=1000,
-        output_pdf="results/3D_one_s_boost_vs_top_s_boost_with_std.pdf"
     )
