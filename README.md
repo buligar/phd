@@ -244,7 +244,23 @@ python graph_1new.py
 Если потребуется, могу добавить вариант **Makefile**/`invoke`-тасков для автоматизации всего конвейера (симуляции → переименование → доп. данные → графики) без ручного редактирования `mode`.
 
 
-Запуск:
+Запуск в chapter2:
 ```bash
 python VAR_version_fs_100.py
 ```
+
+
+Запуск в chapter3:
+```bash
+nengo
+```
+
+
+Альтернативный запуск  в chapter3:
+```bash
+python pure_PC.py
+python pure_osc.py
+```
+
+
+
