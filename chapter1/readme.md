@@ -6,9 +6,9 @@
    results_ext_test1_random_neighbors_s_boost.zip    — случайные соседи 3 самых центральных узлов остальных кластеров с бустом;
      
 2. Построить графики
-   python graph_2.py
-   python graph_3.py
-   python graph_4.py
+   python graph_2old.py
+   python graph_3old.py
+   python graph_4old.py
 
 Чтобы получить данные как в архивах нужно:
 1. Произвести 4 запуска программы python sim_copy_old.py  в различных режимах mode: str = 'one_cluster_bez_boost' и т.д.
@@ -18,13 +18,13 @@
 Последовательно выполняем запуск
 2. python test1.py - доп. данные (значения изменения центральностей)
 3. python test2.py - доп. данные (матрица пересечений управляющих нейронов)
-4. python graph_1.py
-5. python graph_2.py
-6. python graph_3.py
-7. python graph_4.py
+4. python graph_1old.py
+5. python graph_2old.py
+6. python graph_3old.py
+7. python graph_4old.py
 
 Чтобы получить графики сравнения режимов сети из 50 нейронов без stdp и stdp  
 1. Извлечь 
    results_ext_test1.zip
 2. Построить графики
-   python graph_1_stdp.py
+   python graph_1new.py
