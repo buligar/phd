@@ -292,7 +292,11 @@ def solve_ridge(A, Y, lam=1e-2):
     Y = np.asarray(Y, dtype=float)
     G = A.T @ A
     B = A.T @ Y
-    return np.linalg.solve(G + lam * np.eye(G.shape[0]), B)
+    # Регуляризация относительно масштаба активности, а не абсолютная.
+    # Иначе фиксированная lam становится пренебрежимой при большом N ->
+    # переобучение рекуррентного декодера -> срыв предельного цикла o1.
+    reg = lam * np.mean(np.diag(G))
+    return np.linalg.solve(G + reg * np.eye(G.shape[0]), B)
 
 
 def solve_static_decoder(enc, gain, bias, D, rng, cfg: Config, target="identity"):
