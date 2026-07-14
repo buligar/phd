@@ -316,12 +316,17 @@ def population_rates(X, enc, gain, bias, tau_rc, tau_ref):
     return lif_rate_from_current(J, tau_rc=tau_rc, tau_ref=tau_ref)
 
 
+
 def solve_ridge(A, Y, lam=1e-2):
     A = np.asarray(A, dtype=float)
     Y = np.asarray(Y, dtype=float)
     G = A.T @ A
     B = A.T @ Y
-    return np.linalg.solve(G + lam * np.eye(G.shape[0]), B)
+    # Регуляризация относительно масштаба активности, а не абсолютная.
+    # Иначе фиксированная lam становится пренебрежимой при большом N ->
+    # переобучение рекуррентного декодера -> срыв предельного цикла o1.
+    reg = lam * np.mean(np.diag(G))
+    return np.linalg.solve(G + reg * np.eye(G.shape[0]), B)
 
 
 def solve_static_decoder(enc, gain, bias, D, rng, cfg: Config):
