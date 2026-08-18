@@ -14,7 +14,6 @@ Architectures:
        and e_dec drives latent state z.
 
 Outputs:
-- sweep over N_sens = 100..1000 with step 100;
 - synchronization quality between autonomous o1 and top-down prediction g;
 - runtime and memory metrics;
 - overview figures:
