@@ -306,8 +306,8 @@ def spectra_2x2(W, Sigma, i, j):
         Sigma_t  = T @ Sigma @ T.T
         Sii_cond = np.real(Sigma_t[i, i]) * (np.abs(H_t[i, i])**2)
         gc[l] = np.log(np.real(Sz[i, i]) / Sii_cond) # ln(S_11(w)/S_(11|2)(w)) np.real - берем действительную часть числа (без j)
-        dtf[l] = np.abs(Hz[i, j]) / (np.abs(Hz[i, 0])**2 + np.abs(Hz[i, 1])**2)  # |Hz_ij|^2/(|Hz_i0|^2+|Hz_i1|^2)
-        pdc[l] = np.abs(Az[i, j]) / (np.abs(Az[0, j])**2 + np.abs(Az[1, j])**2)  # |Az_ij|^2/(|Az_0j|^2+|Az_1j|^2)
+        dtf[l] = np.abs(Hz[i, j]) / (np.abs(Hz[i, 0])**2 + np.abs(Hz[i, 1])**2)  # |Hz_ij|/(|Hz_i0|^2+|Hz_i1|^2)
+        pdc[l] = np.abs(Az[i, j]) / (np.abs(Az[0, j])**2 + np.abs(Az[1, j])**2)  # |Az_ij|/(|Az_0j|^2+|Az_1j|^2)
 
 
     return gc, dtf, pdc
